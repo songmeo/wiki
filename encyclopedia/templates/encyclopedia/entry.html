@@ -1,0 +1,12 @@
+{% extends "encyclopedia/layout.html" %}
+{% load markdownify %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block body %}
+    {% if entry %}
+        {{ entry | markdownify }}
+    {% else %}
+        <p>Entry Not Found!</p>
+    {% endif %}
+{% endblock %}
