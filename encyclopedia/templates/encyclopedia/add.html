@@ -1,0 +1,25 @@
+{% extends 'encyclopedia/layout.html' %}
+{% load widget_tweaks %}
+{% block title %}
+Create New Page
+{% endblock %}
+{% block body %}
+<h1>Create New Page</h1>
+<form action="{% url 'encyclopedia:add' %}" method="POST">
+    {% csrf_token %}
+
+    {% for hidden_field in forms.hidden_fields %}
+        {{ hidden_field }}
+    {% endfor %}
+
+    {% for field in form.visible_fields %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {% render_field field class="form-control col-md-5" %}
+        </div>
+    {% endfor %}
+    
+    <input type="submit" class="btn btn-primary" value="Save">
+</form>
+
+{% endblock %}

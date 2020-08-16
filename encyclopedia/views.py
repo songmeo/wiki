@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django import forms
 from . import util
 
 
@@ -27,3 +27,16 @@ def search(request):
         return render(request, "encyclopedia/search_result.html", {
             "results":  results
         })
+
+class NewPageForm(forms.Form):
+    title = forms.CharField()
+    content = forms.CharField(
+        widget=forms.Textarea()
+    )
+
+def add(request):
+    if request.method == "POST":
+        form = NewPageForm(request.POST)
+    return render(request, "encyclopedia/add.html",{
+        "form" : NewPageForm()
+    })
