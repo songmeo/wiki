@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django import forms
 from . import util
-
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -37,6 +38,23 @@ class NewPageForm(forms.Form):
 def add(request):
     if request.method == "POST":
         form = NewPageForm(request.POST)
+        entries = util.list_entries()
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            if title in entries:
+                return render(request, "encyclopedia/add.html", {
+                    "form": form,
+                    "error": "Entry exists!"
+                })
+            else:
+                content = form.cleaned_data['content']
+                f = open(f"entries/{title}.md", "w")
+                f.write(content)
+                f.close()
+                return render(request, "encyclopedia/entry.html", {
+                    "entry": util.get_entry(title),
+                    "title": title
+                })
     return render(request, "encyclopedia/add.html",{
         "form" : NewPageForm()
     })
