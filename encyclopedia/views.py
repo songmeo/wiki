@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django import forms
 from . import util
+from random import randint
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -79,4 +80,13 @@ def edit(request,title):
             })
     return render(request, "encyclopedia/edit.html", {
         "form": form
+    })
+
+def random(request):
+    entries = util.list_entries()
+    index = randint(0, len(entries) - 1)
+    title = entries[index]
+    return render(request, "encyclopedia/entry.html", {
+        "entry": util.get_entry(title),
+        "title": title
     })
