@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django import forms
 from . import util
 
@@ -34,6 +32,10 @@ class NewPageForm(forms.Form):
     content = forms.CharField(
         widget=forms.Textarea()
     )
+class EditForm(forms.Form):
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={'class':'form-control col-md-5'})
+    )
 
 def add(request):
     if request.method == "POST":
@@ -57,4 +59,24 @@ def add(request):
                 })
     return render(request, "encyclopedia/add.html",{
         "form" : NewPageForm()
+    })
+
+def edit(request,title):
+    f = open(f"entries/{title}.md", "r")
+    content = f.read()
+    f.close()
+    form = EditForm(initial={'content':content})
+    if request.method == "POST":
+        form = EditForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            f = open(f"entries/{title}.md", "w")
+            f.write(content)
+            f.close()
+            return render(request, "encyclopedia/entry.html", {
+                "entry": util.get_entry(title),
+                "title": title
+            })
+    return render(request, "encyclopedia/edit.html", {
+        "form": form
     })

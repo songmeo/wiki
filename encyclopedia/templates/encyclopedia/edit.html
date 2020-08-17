@@ -1,0 +1,16 @@
+{% extends 'encyclopedia/layout.html' %}
+{% load widget_tweaks %}
+{% block title %}
+Edit Content
+{% endblock %}
+
+{% block body %}
+<h1>Edit Content</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.content }}
+    </div>
+    <input type="submit" class="btn btn-primary" value="Save">
+</form>
+{% endblock %}

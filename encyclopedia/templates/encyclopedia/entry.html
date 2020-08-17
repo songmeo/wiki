@@ -6,6 +6,7 @@
 {% block body %}
     {% if entry %}
         {{ entry | markdownify }}
+        <a type="button" href="{% url 'encyclopedia:edit' title %}" class="btn btn-primary">Edit Content</a>
     {% else %}
         <p>Entry Not Found!</p>
     {% endif %}
